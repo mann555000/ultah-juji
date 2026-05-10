@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>🎵 Happy 19th Birthday, Juji! 🎵</title>
+    <!-- Font Awesome 6 untuk ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fdeef9 0%, #ffe6f2 100%);
+            font-family: 'Quicksand', sans-serif;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: 90px; /* memberi ruang untuk tombol floating */
+        }
+
+        /* BALON NGAMBANG 2D */
+        .balloon-2d {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .balloon {
+            position: relative;
+            width: 60px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 35%, rgba(255,255,240,0.9), #ffb4c6);
+            border-radius: 50%;
+            box-shadow: inset -5px -3px 0 rgba(0,0,0,0.05), 0 8px 15px rgba(0,0,0,0.1);
+            animation: floatBalloon 8s infinite alternate ease-in-out;
+        }
+
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 22px;
+            background: #b37b5e;
+        }
+
+        .balloon::before {
+            content: '';
+            position: absolute;
+            bottom: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: #e68a5e;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+
+        .balloon-1 .balloon { background: radial-gradient(circle at 30% 35%, #ffd966, #ffb347); }
+        .balloon-2 .balloon { background: radial-gradient(circle at 30% 35%, #a3d0ff, #6aa9ff); width: 55px; height: 65px; }
+        .balloon-3 .balloon { background: radial-gradient(circle at 30% 35%, #f9b5d0, #ff85b3); width: 70px; height: 80px; }
+        .balloon-4 .balloon { background: radial-gradient(circle at 30% 35%, #b0f7b6, #7be07e); width: 50px; height: 60px; }
+        .balloon-5 .balloon { background: radial-gradient(circle at 30% 35%, #d9b0ff, #b67cf5); width: 65px; height: 76px; }
+
+        @keyframes floatBalloon {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-35px) rotate(5deg); }
+        }
+
+        .balloon-1 { top: 12%; left: 5%; animation-duration: 7s; animation-delay: -1s; }
+        .balloon-2 { bottom: 15%; right: 3%; animation-duration: 9s; animation-delay: -3s; }
+        .balloon-3 { top: 35%; right: 12%; animation-duration: 11s; animation-delay: -2s; }
+        .balloon-4 { bottom: 25%; left: 8%; animation-duration: 8s; animation-delay: -4s; }
+        .balloon-5 { top: 70%; left: 85%; animation-duration: 10s; animation-delay: -0.5s; }
+        .balloon-6 { top: 20%; left: 88%; animation-duration: 12s; animation-delay: -6s; width: 45px; }
+        .balloon-7 { bottom: 10%; left: 20%; animation-duration: 9s; animation-delay: -2s; }
+        .balloon-8 { top: 85%; right: 15%; animation-duration: 7s; animation-delay: -1s; }
+
+        .balloon-6 .balloon, .balloon-7 .balloon, .balloon-8 .balloon {
+            transform: scale(0.8);
+        }
+
+        /* Kartu utama */
+        .birthday-card {
+            background: rgba(255, 248, 245, 0.96);
+            backdrop-filter: blur(3px);
+            border-radius: 60px;
+            max-width: 550px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 30px 20px 40px;
+            box-shadow: 0 20px 35px rgba(255, 100, 150, 0.25);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            border: 2px solid #ffc5d3;
+        }
+
+        .greeting {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(120deg, #ff839e, #ffbc6e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .name {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #e66b8f;
+            margin: 8px 0;
+            text-shadow: 3px 3px 0 #ffe0b5;
+        }
+
+        .age-badge {
+            background: #ffcf8a;
+            display: inline-block;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 1.4rem;
+            color: #ac4c6a;
+            margin: 10px 0;
+            box-shadow: 0 6px 0 #cc8f54;
+        }
+
+        .message-box {
+            background: #fff7e8;
+            border-radius: 48px;
+            padding: 18px;
+            margin: 20px 0;
+            border: 2px dashed #ffb1c2;
+            font-weight: 600;
+            color: #c45a7a;
+            line-height: 1.5;
+        }
+
+        .gift-button {
+            background: linear-gradient(95deg, #fc9c5e, #ff6f91);
+            border: none;
+            padding: 14px 25px;
+            border-radius: 60px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            cursor: pointer;
+            margin: 15px 0 25px;
+            box-shadow: 0 8px 0 #a6492c;
+            transition: 0.05s linear;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .gift-button:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #a6492c;
+        }
+
+        .cards-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        .cards-container.show {
+            max-height: 1500px;
+        }
+
+        .card-ucapan {
+            background: white;
+            border-radius: 40px;
+            padding: 18px 20px;
+            text-align: left;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+            border-left: 12px solid;
+            transition: 0.2s;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .card-header i {
+            font-size: 2rem;
+            width: 40px;
+            color: #ff88aa;
+        }
+
+        .card-message {
+            font-size: 1rem;
+            color: #4d2f39;
+            line-height: 1.5;
+            padding-left: 12px;
+            border-left: 3px solid #ffc2d4;
+            margin-top: 5px;
+        }
+
+        .card-idoy { border-left-color: #FFB347; }
+        .card-chia { border-left-color: #77DDFF; }
+        .card-ripji { border-left-color: #C38FFF; }
+        .card-grup { border-left-color: #F4A261; }
+
+        .footer-note {
+            margin-top: 25px;
+            font-size: 0.75rem;
+            color: #e094ae;
+            font-weight: 600;
+        }
+
+        .music-hint {
+            font-size: 0.8rem;
+            background: #fff0f3;
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 50px;
+            color: #db7f9b;
+            margin-top: 12px;
+        }
+
+        /* TOMBOL FLOATING PLAY - KANAN BAWAH, TIDAK BERGERAK */
+        .floating-play {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(145deg, #ff88aa, #ff5e8e);
+            border-radius: 50%;
+            box-shadow: 0 8px 20px rgba(255, 80, 120, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .floating-play:active {
+            transform: scale(0.92);
+            box-shadow: 0 4px 12px rgba(255, 80, 120, 0.6);
+        }
+
+        @media (max-width: 550px) {
+            .birthday-card {
+                padding: 20px 16px 30px;
+            }
+            .greeting { font-size: 1.8rem; }
+            .name { font-size: 2.3rem; }
+            .gift-button { font-size: 1.1rem; padding: 12px 20px; }
+            .floating-play {
+                width: 55px;
+                height: 55px;
+                font-size: 1.8rem;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Balon 2D -->
+<div class="balloon-2d balloon-1"><div class="balloon"></div></div>
+<div class="balloon-2d balloon-2"><div class="balloon"></div></div>
+<div class="balloon-2d balloon-3"><div class="balloon"></div></div>
+<div class="balloon-2d balloon-4"><div class="balloon"></div></div>
+<div class="balloon-2d balloon-5"><div class="balloon"></div></div>
+<div class="balloon-2d balloon-6"><div class="balloon"></div></div>
+<div class="balloon-2d balloon-7"><div class="balloon"></div></div>
+<div class="balloon-2d balloon-8"><div class="balloon"></div></div>
+
+<!-- Audio untuk lagu ulang tahun (ganti src dengan file lagu Anda) -->
+<audio id="birthdaySong" preload="auto">
+    <source src="musik.mp3" type="audio/mpeg">
+    <!-- Ganti "ultah.mp3" dengan nama file lagu MP3 Anda, pastikan file tersedia -->
+    Browser tidak mendukung audio.
+</audio>
+
+<div class="birthday-card">
+    <div class="greeting">
+        <i class="fas fa-birthday-cake"></i> HAPPY BIRTHDAY <i class="fas fa-gift"></i>
+    </div>
+    <div class="name">JUJI</div>
+    <div class="age-badge">
+        <i class="fas fa-star"></i> 19 YEARS OLD <i class="fas fa-star"></i>
+    </div>
+
+    <div class="message-box">
+        <p><i class="fas fa-heart" style="color:#ff7696"></i> Untuk <strong>JUJI</strong> yang selalu berkilau <i class="fas fa-heart" style="color:#ff7696"></i></p>
+        <p>Selamat ulang tahun ke-<strong>19</strong>! <br> Semoga setiap langkahmu dipenuhi kebahagiaan, cinta, dan tawa. Kamu luar biasa!</p>
+        <p><i class="fas fa-crown"></i> Stay cute & shine bright like a star <i class="fas fa-sparkle"></i></p>
+    </div>
+
+    <!-- Tombol hadiah kartu ucapan -->
+    <button class="gift-button" id="showCardsBtn">
+        <i class="fas fa-envelope-open-text"></i> Buka Kartu Hadiah Ucapan <i class="fas fa-arrow-down"></i>
+    </button>
+
+    <!-- Kartu ucapan dari teman-teman -->
+    <div id="cardsWrapper" class="cards-container">
+        <div class="card-ucapan card-idoy">
+            <div class="card-header">
+                <i class="fas fa-cat"></i> <span>dari Idoy</span>
+            </div>
+            <div class="card-message">
+                <i class="fas fa-quote-left"></i> Hai Juji! selamat nambah tua, jangan nambah beban hidup ya 🎉✨
+            </div>
+        </div>
+        <div class="card-ucapan card-chia">
+            <div class="card-header">
+                <i class="fas fa-cloud-sun"></i> <span>dari Chia</span>
+            </div>
+            <div class="card-message">
+                <i class="fas fa-quote-left"></i> Selamat ulang tahun Jujiii, semoga kamu panjang umur, sehat selalu, makin tambah hal hal yang baik untuk kamu kedepannya, jaga kesehatan yaa, semoga hal hal baik menyertai kamu
+            </div>
+        </div>
+        <div class="card-ucapan card-ripji">
+            <div class="card-header">
+                <i class="fas fa-dragon"></i> <span>dari Ripji</span>
+            </div>
+            <div class="card-message">
+                <i class="fas fa-quote-left"></i> WISH YOU ALL THE BEST, JUJI! Terima kasih sudah jadi teman saya. Semoga hari-harimu penuh warna dan kejutan manis! 🥳💪
+            </div>
+        </div>
+        <div class="card-ucapan card-grup">
+            <div class="card-header">
+                <i class="fas fa-users"></i> <span>Unchukub Crew</span>
+            </div>
+            <div class="card-message">
+                <i class="fas fa-quote-left"></i> Dari seluruh member Unchukub: Selamat ulang tahun Juji! Terima kasih sudah jadi bagian keluarga kami. Tetap lucu, kocak, dan menginspirasi. Kami sayang kamu! 💖🎂
+            </div>
+        </div>
+        <div class="card-ucapan card-grup" style="border-left-color:#F9C74F">
+            <div class="card-header">
+                <i class="fas fa-music"></i> <span>Bonus dari Teman-teman</span>
+            </div>
+            <div class="card-message">
+                <i class="fas fa-quote-left"></i> Raya, Theres, dan semua anggota member ngirim pelukan hangat! Semoga ultahmu seindah pelangi! 🌈💕
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        <i class="fas fa-hand-peace"></i>  Wish you all the best  <i class="fas fa-hand-peace"></i>
+    </div>
+    <div class="music-hint" id="musicHint">
+        <i class="fas fa-headphones"></i> @Made by Alman — Tekan tombol <i class="fas fa-music"></i> di kanan bawah untuk memutar lagu
+    </div>
+</div>
+
+<!-- Tombol floating play (tetap di kanan bawah) -->
+<button id="floatingPlayBtn" class="floating-play">
+    <i class="fas fa-play"></i>
+</button>
+
+<script>
+    (function() {
+        // Ambil elemen audio
+        const audio = document.getElementById('birthdaySong');
+        const playBtn = document.getElementById('floatingPlayBtn');
+        const hintEl = document.getElementById('musicHint');
+        let isPlaying = false;
+
+        // Fungsi untuk memutar lagu
+        function playSong() {
+            if (audio) {
+                // Jika lagu sedang berjalan, tidak melakukan apa-apa (atau bisa di-pause, tapi sesuai permintaan hanya play)
+                // Jika sudah selesai, kita bisa play ulang
+                audio.play().then(() => {
+                    isPlaying = true;
+                    if (hintEl) {
+                        hintEl.innerHTML = '<i class="fas fa-music"></i>  Lagu sedang diputar! Selamat Ulang Tahun Juji  <i class="fas fa-music"></i>';
+                        hintEl.style.background = "#ffe0c4";
+                    }
+                    // Konfeti efek saat tombol ditekan
+                    canvasConfetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, startVelocity: 14, colors: ['#ffb7c5', '#ffdfb0', '#b4f0ff'] });
+                    if (navigator.vibrate) navigator.vibrate(60);
+                }).catch(err => {
+                    console.warn("Gagal memutar audio:", err);
+                    if (hintEl) hintEl.innerHTML = '<i class="fas fa-exclamation-triangle">';
+                });
+            } else {
+                console.error("Elemen audio tidak ditemukan");
+            }
+        }
+
+        // Event listener tombol floating
+        if (playBtn) {
+            playBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                playSong();
+            });
+        }
+
+        // Tombol kartu ucapan (toggle tampilan)
+        const showBtn = document.getElementById('showCardsBtn');
+        const cardsContainer = document.getElementById('cardsWrapper');
+
+        if (showBtn && cardsContainer) {
+            showBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                cardsContainer.classList.toggle('show');
+                canvasConfetti({ particleCount: 80, spread: 65, origin: { y: 0.7 }, startVelocity: 14, colors: ['#fb8da0', '#ffd966', '#a0e7e5'] });
+                if (navigator.vibrate) navigator.vibrate(40);
+                
+                if (cardsContainer.classList.contains('show')) {
+                    showBtn.innerHTML = '<i class="fas fa-envelope-open"></i>  Kartu Ucapan Terbuka  <i class="fas fa-chevron-up"></i>';
+                } else {
+                    showBtn.innerHTML = '<i class="fas fa-envelope-open-text"></i>  Buka Kartu Hadiah Ucapan  <i class="fas fa-arrow-down"></i>';
+                }
+            });
+        }
+
+        // Efek klik pada kartu ucapan (konfeti kecil)
+        const allCards = document.querySelectorAll('.card-ucapan');
+        allCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                e.stopPropagation();
+                canvasConfetti({ particleCount: 25, spread: 35, origin: { y: 0.8 }, startVelocity: 8, colors: ['#ffb48a', '#ffd9b5'] });
+                if (navigator.vibrate) navigator.vibrate(30);
+                card.style.transform = 'scale(0.99)';
+                setTimeout(() => { card.style.transform = ''; }, 150);
+            });
+        });
+
+        // Konfeti ringan saat halaman selesai dimuat
+        window.addEventListener('load', () => {
+            canvasConfetti({ particleCount: 40, spread: 45, origin: { y: 0.7 }, startVelocity: 8, colors: ['#ffa6c9', '#ffd966'] });
+        });
+
+        // Opsional: jika ingin lagu diulang otomatis setelah selesai (loop)
+        // audio.loop = true; // Uncomment jika ingin loop
+    })();
+</script>
+</body>
+</html>
